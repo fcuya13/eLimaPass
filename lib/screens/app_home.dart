@@ -1,4 +1,6 @@
+import 'package:elimapass/screens/map_test.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'home_page.dart';
 
@@ -44,7 +46,7 @@ class _AppHomeState extends State<AppHome> {
           ),
         ),
       ),
-      body: <Widget>[const HomePage(), SizedBox()][_currPageIndex],
+      body: <Widget>[const HomePage(), const MapTest()][_currPageIndex],
       bottomNavigationBar: NavigationBar(
         height: 65,
         onDestinationSelected: (int index) {

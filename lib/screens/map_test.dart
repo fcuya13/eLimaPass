@@ -16,14 +16,15 @@ class MapTest extends StatefulWidget{
 
 class _MapTestState extends State<MapTest>{
   GoogleMapController? mapController;
-  late LatLng _currentPosition;
+  LatLng? _currentPosition;
+  LocationPermission? permission;
 
   getLocation() async {
-    LocationPermission permission;
     permission = await Geolocator.requestPermission();
 
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      locationSettings: AndroidSettings(accuracy: LocationAccuracy.high)
+    );
     double lat = position.latitude;
     double long = position.longitude;
 
@@ -56,12 +57,14 @@ class _MapTestState extends State<MapTest>{
   }
 
   void _updateCamera() {
-    mapController?.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        target: _currentPosition,
-        zoom: 15.0,
-      ),
-    ));
+    if (_currentPosition != null) {
+      mapController?.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: _currentPosition!,
+          zoom: 15.0,
+        ),
+      ));
+    }
   }
 
   @override
@@ -72,6 +75,12 @@ class _MapTestState extends State<MapTest>{
 
   @override
   Widget build(BuildContext context) {
+    if (_currentPosition == null){
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -79,7 +88,7 @@ class _MapTestState extends State<MapTest>{
         child: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
-            target: _currentPosition,
+            target: _currentPosition!,
             zoom: 15.0,
           ),
           myLocationEnabled: true,

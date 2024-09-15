@@ -1,5 +1,5 @@
+import 'package:elimapass/screens/register_page.dart';
 import 'package:flutter/material.dart';
-
 import '../widgets/car_background.dart';
 import 'app_home.dart';
 
@@ -27,6 +27,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
     }
+    print({
+      _dni,
+      _password,
+    });
   }
 
   @override
@@ -86,7 +90,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 6,
                           ),
                           GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => const RegisterScreen(),
+                                  ),
+                                );
+                              },
                               child: const Text("¡Regístrate aquí!",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w800,
@@ -132,11 +142,14 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
         validator: (value) {
           if (value == null ||
-              value.trim().length < 8 ||
+              value.trim().length != 8 ||
               !value.contains(RegExp(r'[0-9]'))) {
             return 'Ingrese un DNI válido';
           }
           return null;
+        },
+        onSaved: (value){
+          _dni = value!;
         },
       ),
       const SizedBox(
@@ -169,6 +182,9 @@ class _LoginScreenState extends State<LoginScreen> {
             return 'Ingrese una contraseña válida';
           }
           return null;
+        },
+        onSaved: (value){
+          _password = value!;
         },
       )
     ]);

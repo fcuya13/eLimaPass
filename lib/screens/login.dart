@@ -1,4 +1,6 @@
+import 'package:elimapass/screens/recovery_page.dart';
 import 'package:elimapass/screens/register_page.dart';
+import 'package:elimapass/util/validators.dart';
 import 'package:flutter/material.dart';
 import '../widgets/car_background.dart';
 import 'app_home.dart';
@@ -12,7 +14,7 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> with Validators {
   var _dni = "";
   var _password = "";
   final _formKey = GlobalKey<FormState>();
@@ -21,10 +23,10 @@ class _LoginScreenState extends State<LoginScreen> {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (ctx) => const AppHome(),
-        ),
+        ), (Route<dynamic> route) => false
       );
     }
     print({
@@ -105,6 +107,28 @@ class _LoginScreenState extends State<LoginScreen> {
                                   )))
                         ],
                       ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => const RecoveryScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text("¿Olvidaste tu contraseña?",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  )))
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -140,14 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
           fontWeight: FontWeight.w500,
           color: Color(0xff111318),
         ),
-        validator: (value) {
-          if (value == null ||
-              value.trim().length != 8 ||
-              !value.contains(RegExp(r'[0-9]'))) {
-            return 'Ingrese un DNI válido';
-          }
-          return null;
-        },
+        validator: (value) => validateDni(value),
         onSaved: (value){
           _dni = value!;
         },
@@ -177,12 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
           fontWeight: FontWeight.w500,
           color: Color(0xff111318),
         ),
-        validator: (value) {
-          if (value == null || value.length < 8) {
-            return 'Ingrese una contraseña válida';
-          }
-          return null;
-        },
+        validator: (value) => validatePassword(value),
         onSaved: (value){
           _password = value!;
         },

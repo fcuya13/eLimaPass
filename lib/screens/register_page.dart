@@ -1,4 +1,5 @@
 import 'package:elimapass/screens/login.dart';
+import 'package:elimapass/util/validators.dart';
 import 'package:flutter/material.dart';
 import '../widgets/car_background.dart';
 
@@ -11,7 +12,7 @@ class RegisterScreen extends StatefulWidget {
   }
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> with Validators {
   var _dni = "";
   var _nombres = "";
   var _apellidos = "";
@@ -153,14 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           fontWeight: FontWeight.w500,
           color: Color(0xff111318),
         ),
-        validator: (value) {
-          if (value == null ||
-              value.trim().length != 8 ||
-              !value.contains(RegExp(r'[0-9]'))) {
-            return 'Ingrese un DNI válido';
-          }
-          return null;
-        },
+        validator: (value) => validateDni(value),
         onSaved: (value) {
           _dni = value!;
         },
@@ -189,12 +183,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           fontWeight: FontWeight.w500,
           color: Color(0xff111318),
         ),
-        validator: (value) {
-          if (value == null || !value.contains("@")) {
-            return 'Ingrese un correo válido';
-          }
-          return null;
-        },
+        validator: (value) => validateEmail(value),
         onSaved: (value) {
           _email = value!;
         },
@@ -226,6 +215,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onSaved: (value) {
           _nombres = value!;
         },
+        validator: (value) => validateName(value),
       ),
       const SizedBox(
         height: 10,
@@ -255,6 +245,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         onSaved: (value) {
           _apellidos = value!;
         },
+        validator: (value) => validateName(value),
       ),
       const SizedBox(
         height: 10,
@@ -282,12 +273,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           fontWeight: FontWeight.w500,
           color: Color(0xff111318),
         ),
-        validator: (value) {
-          if (value == null || value.length < 8) {
-            return 'Ingrese una contraseña de 8 caracteres';
-          }
-          return null;
-        },
+        validator: (value) => validatePassword(value),
         onSaved: (value) {
           _password = value!;
         },

@@ -1,6 +1,5 @@
 import 'package:elimapass/screens/map_test.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'home_page.dart';
 

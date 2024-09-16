@@ -82,7 +82,7 @@ class _MapTestState extends State<MapTest>{
     }
 
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: GoogleMap(

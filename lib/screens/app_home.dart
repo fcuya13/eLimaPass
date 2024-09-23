@@ -44,6 +44,9 @@ class _AppHomeState extends State<AppHome> {
             color: Colors.white,
           ),
         ),
+        actions: [
+          IconButton(onPressed: () {}, icon: Icon(Icons.logout))
+        ],
       ),
       body: <Widget>[const HomePage(), const MapTest()][_currPageIndex],
       bottomNavigationBar: NavigationBar(

@@ -1,3 +1,4 @@
+import 'package:elimapass/screens/tarjeta_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,10 +28,22 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(25),
-                child: const Image(
-                  image: AssetImage('assets/lima_pass.jpg'),
+              Hero(
+                tag: 'tarjeta',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: GestureDetector(
+                    child: const Image(
+                      image: AssetImage('assets/lima_pass.jpg'),
+                    ),
+                    onTap: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => const TarjetaPage(),
+                          ))
+                    },
+                  ),
                 ),
               ),
               const SizedBox(

@@ -13,16 +13,17 @@ class _TarjetaPageState extends State<TarjetaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: null,
-        body: Padding(
-            padding: EdgeInsets.symmetric(vertical: 150, horizontal: 10),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 150, horizontal: 10),
             child: Column(
               children: [
-                Icon(
+                const Icon(
                   Icons.wifi,
                   size: 50,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Hero(
@@ -35,6 +36,23 @@ class _TarjetaPageState extends State<TarjetaPage> {
                   ),
                 ),
               ],
-            )));
+            ),
+          ),
+          Positioned(
+            top: 40, // Ajuste de posición vertical del botón
+            left: 10, // Ajuste de posición horizontal del botón
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white, // Color del ícono de retroceder
+              ),
+              onPressed: () {
+                Navigator.pop(context); // Retrocede a la pantalla anterior
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

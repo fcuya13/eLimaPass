@@ -1,7 +1,8 @@
 import 'package:elimapass/screens/map_test.dart';
 import 'package:flutter/material.dart';
-
+import 'alert_page.dart';
 import 'home_page.dart';
+import 'login.dart';
 
 class AppHome extends StatefulWidget {
   const AppHome({super.key});
@@ -45,7 +46,19 @@ class _AppHomeState extends State<AppHome> {
           ),
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.logout))
+          IconButton(onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const AlertPage()),
+            );
+          }, icon: Icon(Icons.add_alert)),
+          IconButton(onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
+            );
+          }, icon: Icon(Icons.logout))
         ],
       ),
       body: <Widget>[const HomePage(), const MapTest()][_currPageIndex],

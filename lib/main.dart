@@ -1,4 +1,5 @@
 import 'package:elimapass/screens/login.dart';
+import 'package:elimapass/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,8 +12,9 @@ var darkColorScheme = ColorScheme.fromSeed(
   surface: const Color.fromARGB(255, 31, 31, 44),
 );
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await initNotifications();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

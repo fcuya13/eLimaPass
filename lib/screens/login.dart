@@ -1,12 +1,13 @@
 import 'package:elimapass/screens/recovery_page.dart';
 import 'package:elimapass/screens/register_page.dart';
+import 'package:elimapass/services/login_service.dart';
+import 'package:elimapass/services/user_provider.dart';
 import 'package:elimapass/util/validators.dart';
+import 'package:elimapass/widgets/loading_foreground.dart';
 import 'package:flutter/material.dart';
+
 import '../widgets/car_background.dart';
 import 'app_home.dart';
-import 'package:elimapass/services/login_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:elimapass/models/entities/User.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,43 +23,35 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
   var _password = "";
   final _formKey = GlobalKey<FormState>();
   final _loginService = LoginService();
+  UserProvider provider = UserProvider();
+  bool loading = false;
 
-  Future<User?> _getUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('user_id');
-    final userDni = prefs.getString('user_dni');
-    final userNombres = prefs.getString('user_nombres');
-    final userApellidos = prefs.getString('user_apellidos');
-    final userEmail = prefs.getString('user_email');
-    if (userId != null &&
-        userDni != null &&
-        userNombres != null &&
-        userApellidos != null &&
-        userEmail != null) {
-      return User(
-        id: userId,
-        dni: userDni,
-        nombres: userNombres,
-        apellidos: userApellidos,
-        email: userEmail,
-      );
-    } else {
-      return null;
+  Future<void> checkLogin() async {
+    String? loggedUser = await provider.getUser();
+
+    if (loggedUser == null) {
+      return;
     }
+
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const AppHome()));
   }
 
-  void _submit() async{
+  void _submit() async {
+    setState(() {
+      loading = true;
+    });
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
       try {
-        final response = await _loginService.login(_dni, _password);
+        await _loginService.login(_dni, _password);
         // Si la autenticación es exitosa, navega a la pantalla de inicio
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (ctx) => const AppHome(),
-            ), (Route<dynamic> route) => false
-        );
+            ),
+            (Route<dynamic> route) => false);
       } catch (e) {
         // Si la autenticación falla, muestra un mensaje de error
         ScaffoldMessenger.of(context).showSnackBar(
@@ -66,10 +59,15 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
         );
       }
     }
-    print({
-      _dni,
-      _password,
+    setState(() {
+      loading = false;
     });
+  }
+
+  @override
+  void initState() {
+    checkLogin();
+    super.initState();
   }
 
   @override
@@ -172,6 +170,7 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
               ),
             ),
           ),
+          if (loading) const LoadingForeground(),
         ],
       ),
     );
@@ -202,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
           color: Color(0xff111318),
         ),
         validator: (value) => validateDni(value),
-        onSaved: (value){
+        onSaved: (value) {
           _dni = value!;
         },
       ),
@@ -232,10 +231,9 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
           color: Color(0xff111318),
         ),
         validator: (value) => validatePassword(value),
-        onSaved: (value){
+        onSaved: (value) {
           _password = value!;
         },
-
       )
     ]);
   }

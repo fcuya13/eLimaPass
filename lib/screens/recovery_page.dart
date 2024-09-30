@@ -1,4 +1,3 @@
-import 'package:elimapass/screens/login.dart';
 import 'package:elimapass/screens/register_page.dart';
 import 'package:elimapass/util/validators.dart';
 import 'package:elimapass/widgets/recovery_dialog.dart';
@@ -26,7 +25,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators{
     if (isValid) {
       _formKey.currentState!.save();
       showDialog(context: context, builder: (BuildContext context) {
-        return RecoveryDialog();
+        return const RecoveryDialog();
       });
       /*
       Navigator.of(context).push(

@@ -1,5 +1,7 @@
 import 'package:elimapass/screens/map_test.dart';
+import 'package:elimapass/services/user_provider.dart';
 import 'package:flutter/material.dart';
+
 import 'alert_page.dart';
 import 'home_page.dart';
 import 'login.dart';
@@ -15,6 +17,7 @@ class AppHome extends StatefulWidget {
 
 class _AppHomeState extends State<AppHome> {
   int _currPageIndex = 0;
+  UserProvider provider = UserProvider();
 
   final destinations = <Widget>[
     const NavigationDestination(
@@ -46,19 +49,25 @@ class _AppHomeState extends State<AppHome> {
           ),
         ),
         actions: [
-          IconButton(onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const AlertPage()),
-            );
-          }, icon: Icon(Icons.add_alert)),
-          IconButton(onPressed: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
-            );
-          }, icon: Icon(Icons.logout))
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AlertPage()),
+                );
+              },
+              icon: const Icon(Icons.add_alert)),
+          IconButton(
+              onPressed: () async {
+                await provider.removeUser();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (Route<dynamic> route) =>
+                      false, // Elimina todas las rutas anteriores
+                );
+              },
+              icon: const Icon(Icons.logout))
         ],
       ),
       body: <Widget>[const HomePage(), const MapTest()][_currPageIndex],

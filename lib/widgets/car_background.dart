@@ -7,8 +7,8 @@ class CarBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Positioned.fill(
-          child: const Image(
+        const Positioned.fill(
+          child: Image(
             image: AssetImage('assets/home.jpeg'),
             fit: BoxFit.cover, // Ensures the image covers the whole screen
           ),

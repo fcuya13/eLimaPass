@@ -5,7 +5,7 @@ class RecoveryDialog extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return const AlertDialog(
       title: Text("Alo"),
     );
   }

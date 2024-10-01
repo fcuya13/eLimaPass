@@ -10,7 +10,6 @@ class LoginService {
   static const String _baseUrl = '${BACKEND_URL}elimapass/v1/login/';
 
   Future<User?> login(String dni, String password) async {
-    print(_baseUrl);
     final response = await http.post(
       Uri.parse(_baseUrl),
       headers: {
@@ -28,9 +27,9 @@ class LoginService {
       await provider.saveUser(user);
       return user;
     } else if (response.statusCode == 401) {
-      throw Exception('Invalid credentials');
+      throw Exception('Credenciales inválidas');
     } else {
-      throw Exception('Error logging in: ${response.statusCode}');
+      throw Exception('Ha ocurrido un error desconocido. Inténtelo más tarde');
     }
   }
 }

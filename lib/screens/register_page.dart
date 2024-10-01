@@ -1,7 +1,10 @@
 import 'package:elimapass/screens/login.dart';
+import 'package:elimapass/services/RegisterService.dart';
 import 'package:elimapass/util/validators.dart';
 import 'package:flutter/material.dart';
+
 import '../widgets/car_background.dart';
+import '../widgets/loading_foreground.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -20,25 +23,39 @@ class _RegisterScreenState extends State<RegisterScreen> with Validators {
   var _password = "";
   var _tarjeta = "";
 
+  final _registerService = RegisterService();
+  bool loading = false;
+  bool success = false;
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController passController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
 
-  void _submit() {
+  void _submit() async {
+    setState(() {
+      loading = true;
+    });
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
-      print({
-        _dni,
-        _nombres,
-        _apellidos,
-        _email,
-        _password,
-        _tarjeta
-      });
+      try {
+        await _registerService.register(
+            _dni, _email, _nombres, _apellidos, _password, _tarjeta);
+        // Si la autenticación es exitosa, navega a la pantalla de login
+        setState(() {
+          success = true;
+        });
+      } catch (e) {
+        // Si la autenticación falla, muestra un mensaje de error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error de registro: $e')),
+        );
+      }
     }
+    setState(() {
+      loading = false;
+    });
   }
-
 
   @override
   void dispose() {
@@ -99,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Validators {
                         children: [
                           const Text("¿Ya estás registrado?",
                               style:
-                              TextStyle(color: Colors.white, fontSize: 13)),
+                                  TextStyle(color: Colors.white, fontSize: 13)),
                           const SizedBox(
                             width: 6,
                           ),
@@ -125,6 +142,26 @@ class _RegisterScreenState extends State<RegisterScreen> with Validators {
               ),
             ),
           ),
+          if (loading) const LoadingForeground(),
+          if (success)
+            AlertDialog(
+              title: const Text("Registro exitoso"),
+              content: const Text(
+                "Presione el botón para iniciar sesión",
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (ctx) => const LoginScreen(),
+                        ),
+                        (Route<dynamic> route) => false);
+                  },
+                  child: const Text("Ir a inicio"),
+                ),
+              ],
+            ),
         ],
       ),
     );
@@ -221,7 +258,6 @@ class _RegisterScreenState extends State<RegisterScreen> with Validators {
         height: 10,
       ),
       TextFormField(
-        obscureText: true,
         decoration: InputDecoration(
           errorStyle: const TextStyle(color: Color(0xffffb4ab)),
           border: OutlineInputBorder(
@@ -305,7 +341,7 @@ class _RegisterScreenState extends State<RegisterScreen> with Validators {
           color: Color(0xff111318),
         ),
         validator: (value) {
-          if (passController.text != confirmPassController.text){
+          if (passController.text != confirmPassController.text) {
             return "Las contraseñas no coinciden";
           }
           return null;
@@ -316,7 +352,6 @@ class _RegisterScreenState extends State<RegisterScreen> with Validators {
       ),
       TextFormField(
         keyboardType: TextInputType.number,
-        obscureText: true,
         decoration: InputDecoration(
           errorStyle: const TextStyle(color: Color(0xffffb4ab)),
           border: OutlineInputBorder(
@@ -337,13 +372,13 @@ class _RegisterScreenState extends State<RegisterScreen> with Validators {
           fontWeight: FontWeight.w500,
           color: Color(0xff111318),
         ),
-        validator: (value){
-          if (value!.isEmpty || value.length == 10){
+        validator: (value) {
+          if (value!.isEmpty || value.length == 10) {
             return null;
           }
           return "La tarjeta ingresada no es válida";
         },
-        onSaved: (value){
+        onSaved: (value) {
           _tarjeta = value!;
         },
       )

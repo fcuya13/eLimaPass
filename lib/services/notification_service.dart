@@ -1,9 +1,17 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 Future<void> initNotifications() async {
-  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('noti_icon');
+  PermissionStatus status = await Permission.notification.status;
+
+  if (!status.isGranted) {
+    status = await Permission.notification.request();
+  }
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('noti_icon');
 
   const InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
@@ -15,7 +23,8 @@ Future<void> initNotifications() async {
 }
 
 Future<void> showNotification(String title, String body) async {
-  const AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+  const AndroidNotificationDetails androidNotificationDetails =
+      AndroidNotificationDetails(
     'your channel id', // ID del canal
     'your channel name', // Nombre del canal
     importance: Importance.max,

@@ -12,6 +12,7 @@ class UserProvider {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('user_id');
 
+    print(userId);
     if (userId != null) {
       return userId;
     }

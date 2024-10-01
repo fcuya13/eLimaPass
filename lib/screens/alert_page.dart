@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:elimapass/services/notification_service.dart';
+import 'package:flutter/material.dart';
 
 class AlertPage extends StatefulWidget {
   const AlertPage({super.key});
@@ -20,9 +20,15 @@ class _AlertPageState extends State<AlertPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         backgroundColor: const Color(0XFF405f90),
         title: const Text(
-          "Configurar alerta de saldo bajo",
+          "Alerta de saldo bajo",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
@@ -41,8 +47,8 @@ class _AlertPageState extends State<AlertPage> {
                     title: const Text("¿Para qué sirve esta alerta?"),
                     content: const Text(
                       "Esta alerta sirve para establecer un saldo mínimo en la tarjeta. "
-                          "Una vez que el saldo de la tarjeta llegue a este mínimo o sea menor, "
-                          "se enviará una notificación a su celular avisando sobre el saldo bajo.",
+                      "Una vez que el saldo de la tarjeta llegue a este mínimo o sea menor, "
+                      "se enviará una notificación a su celular avisando sobre el saldo bajo.",
                     ),
                     actions: [
                       TextButton(
@@ -56,94 +62,91 @@ class _AlertPageState extends State<AlertPage> {
                 },
               );
             },
-          ),
-          // Botón para retroceder
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
           )
         ],
       ),
-      body:  Center(
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-        mainAxisSize: MainAxisSize.min, // Esto asegura que el formulario ocupe el mínimo espacio necesario
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-        const Text(
-        "Ingrese la cantidad mínima de saldo:",
-        style: TextStyle(fontSize: 18),
-        ),
-        const SizedBox(height: 20),
-        // Container para limitar el ancho del campo de texto
-        SizedBox(
-          width: screenWidth / 3, // Define el ancho como un tercio de la pantalla
-          child: TextFormField(
-            controller: _controller,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              errorStyle: const TextStyle(color: Color(0xffffb4ab)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(
-                  width: 0,
-                  style: BorderStyle.none,
+      body: Center(
+        heightFactor: 1,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize
+                  .min, // Esto asegura que el formulario ocupe el mínimo espacio necesario
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  "Ingrese la cantidad mínima de saldo",
+                  style: TextStyle(fontSize: 18),
                 ),
-              ),
-              hintText: 'Saldo mínimo',
-              hintStyle: TextStyle(
-                fontWeight: FontWeight.normal,
-                color: const Color(0xff111318).withOpacity(0.3),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Color(0xff111318),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Por favor ingrese una cantidad";
-              }
-              if (int.tryParse(value) == null) {
-                return "Ingrese un número válido";
-              }
-              return null;
-              },
-            ),
-        ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0XFFFFFFFF),
-              foregroundColor: const Color(0xff111318),
-              fixedSize: const Size(300, 50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+                const SizedBox(height: 20),
+                // Container para limitar el ancho del campo de texto
+                SizedBox(
+                  width: 100,
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    controller: _controller,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      errorStyle: const TextStyle(color: Color(0xffffb4ab)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      hintText: 'Saldo',
+                      hintStyle: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        color: const Color(0xff111318).withOpacity(0.3),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                    ),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff111318),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Por favor ingrese una cantidad";
+                      }
+                      if (int.tryParse(value) == null) {
+                        return "Ingrese un número válido";
+                      }
+                      return null;
+                    },
+                  ),
                 ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0XFFFFFFFF),
+                    foregroundColor: const Color(0xff111318),
+                    fixedSize: const Size(125, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Acción al enviar la cantidad numérica
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Cantidad guardada")),
+                      );
+                      showNotification("Alerta configurada",
+                          "Se ha configurado una alerta de saldo bajo de S/. ${_controller.text}");
+                    }
+                  },
+                  child: const Text(
+                    "Guardar",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                ),
+              ],
             ),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-              // Acción al enviar la cantidad numérica
-                ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Cantidad guardada")),
-                );
-                showNotification(
-                  "Alerta de saldo bajo",
-                  "Se ha configurado una alerta de saldo bajo cuando el saldo de la tarjeta sea menor a ${_controller.text}"
-                );
-              }
-            },
-            child: const Text("Guardar"),
-          ),
-          ],
-          ),
           ),
         ),
       ),

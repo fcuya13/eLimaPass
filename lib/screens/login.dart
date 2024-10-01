@@ -1,7 +1,6 @@
 import 'package:elimapass/screens/recovery_page.dart';
 import 'package:elimapass/screens/register_page.dart';
 import 'package:elimapass/services/login_service.dart';
-import 'package:elimapass/services/user_provider.dart';
 import 'package:elimapass/util/validators.dart';
 import 'package:elimapass/widgets/loading_foreground.dart';
 import 'package:flutter/material.dart';
@@ -23,19 +22,7 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
   var _password = "";
   final _formKey = GlobalKey<FormState>();
   final _loginService = LoginService();
-  UserProvider provider = UserProvider();
   bool loading = false;
-
-  Future<void> checkLogin() async {
-    String? loggedUser = await provider.getUser();
-
-    if (loggedUser == null) {
-      return;
-    }
-
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const AppHome()));
-  }
 
   void _submit() async {
     setState(() {
@@ -62,12 +49,6 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
     setState(() {
       loading = false;
     });
-  }
-
-  @override
-  void initState() {
-    checkLogin();
-    super.initState();
   }
 
   @override

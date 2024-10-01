@@ -1,4 +1,4 @@
-import 'package:elimapass/screens/login.dart';
+import 'package:elimapass/screens/loading_screen.dart';
 import 'package:elimapass/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +12,7 @@ var darkColorScheme = ColorScheme.fromSeed(
   surface: const Color.fromARGB(255, 31, 31, 44),
 );
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initNotifications();
   SystemChrome.setPreferredOrientations([
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: darkColorScheme.surface,
       ),
       themeMode: ThemeMode.system,
-      home: const LoginScreen(),
+      home: LoadingScreen(),
     );
   }
 }

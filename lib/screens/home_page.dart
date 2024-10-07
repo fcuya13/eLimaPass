@@ -17,16 +17,32 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var _isVisible = false;
   var _loading = false;
+  var _loadingViajes = false;
   List<Viaje> _viajes = [];
   TarjetaService tarjetaService = TarjetaService();
   double _saldo = 0;
 
-  Future<void> cargarViajes() async {
-    List<Viaje> listaViajes = await tarjetaService.getViajes();
-
+  void cargarViajes() async {
+    if (_loadingViajes) return;
     setState(() {
-      _viajes = listaViajes;
+      _loadingViajes = true;
     });
+
+    try {
+      List<Viaje> listaViajes = await tarjetaService.getViajes();
+      setState(() {
+        _viajes = listaViajes;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ha ocurrido un error')),
+      );
+    } finally {
+      setState(() {
+        _loadingViajes = false;
+      });
+    }
   }
 
   @override
@@ -37,6 +53,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _changeVisibility() async {
+    if (_loading) return;
     if (_isVisible) {
       setState(() {
         _isVisible = !_isVisible;
@@ -54,6 +71,7 @@ class _HomePageState extends State<HomePage> {
         _isVisible = !_isVisible;
       });
     } catch (e) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Ha ocurrido un error')),
       );
@@ -98,14 +116,27 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 20,
               ),
-              const Text(
-                "Viajes Recientes",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Viajes Recientes",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: cargarViajes, icon: const Icon(Icons.refresh))
+                ],
               ),
-              Expanded(child: ViajesList(viajes: _viajes)),
+              if (_loadingViajes)
+                const Padding(
+                  padding: EdgeInsets.all(50),
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              else
+                Expanded(child: ViajesList(viajes: _viajes)),
             ],
           ),
         ),
@@ -181,9 +212,11 @@ class _HomePageState extends State<HomePage> {
               Visibility(
                 visible: _loading,
                 child: const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(),
+                  height: 25,
+                  width: 25,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 3,
+                  ),
                 ),
               )
             ],

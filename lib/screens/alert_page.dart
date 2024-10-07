@@ -14,56 +14,20 @@ class _AlertPageState extends State<AlertPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Obtiene el ancho de la pantalla
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
         backgroundColor: const Color(0XFF405f90),
-        title: const Text(
-          "Alerta de saldo bajo",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-            color: Colors.white,
+        title: const Center(
+          child: Text(
+            "Alerta de saldo bajo",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+              color: Colors.white,
+            ),
           ),
         ),
-        actions: [
-          // Botón de información
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text("¿Para qué sirve esta alerta?"),
-                    content: const Text(
-                      "Esta alerta sirve para establecer un saldo mínimo en la tarjeta. "
-                      "Una vez que el saldo de la tarjeta llegue a este mínimo o sea menor, "
-                      "se enviará una notificación a su celular avisando sobre el saldo bajo.",
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("Cerrar"),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          )
-        ],
       ),
       body: Center(
         heightFactor: 1,
@@ -80,7 +44,33 @@ class _AlertPageState extends State<AlertPage> {
                   "Ingrese la cantidad mínima de saldo",
                   style: TextStyle(fontSize: 18),
                 ),
-                const SizedBox(height: 20),
+                IconButton(
+                  icon: const Icon(Icons.info_outline),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text("¿Para qué sirve esta alerta?"),
+                          content: const Text(
+                            "Esta alerta sirve para establecer un saldo mínimo en la tarjeta. "
+                            "Una vez que el saldo de la tarjeta llegue a este mínimo o sea menor, "
+                            "se enviará una notificación a su celular avisando sobre el saldo bajo.",
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text("Cerrar"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                const SizedBox(height: 10),
                 // Container para limitar el ancho del campo de texto
                 SizedBox(
                   width: 100,

@@ -51,9 +51,14 @@ class _AppHomeState extends State<AppHome> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AlertPage()),
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const SizedBox(
+                      height: 300,
+                      child: AlertPage(),
+                    );
+                  },
                 );
               },
               icon: const Icon(Icons.add_alert),
@@ -61,6 +66,7 @@ class _AppHomeState extends State<AppHome> {
           IconButton(
               onPressed: () async {
                 await provider.removeTarjeta();
+
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),

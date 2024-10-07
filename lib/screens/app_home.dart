@@ -1,5 +1,5 @@
 import 'package:elimapass/screens/map_test.dart';
-import 'package:elimapass/services/user_provider.dart';
+import 'package:elimapass/services/tarjeta_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'alert_page.dart';
@@ -17,7 +17,7 @@ class AppHome extends StatefulWidget {
 
 class _AppHomeState extends State<AppHome> {
   int _currPageIndex = 0;
-  UserProvider provider = UserProvider();
+  TarjetaProvider provider = TarjetaProvider();
 
   final destinations = <Widget>[
     const NavigationDestination(
@@ -56,10 +56,11 @@ class _AppHomeState extends State<AppHome> {
                   MaterialPageRoute(builder: (context) => const AlertPage()),
                 );
               },
-              icon: const Icon(Icons.add_alert)),
+              icon: const Icon(Icons.add_alert),
+              color: Colors.white),
           IconButton(
               onPressed: () async {
-                await provider.removeUser();
+                await provider.removeTarjeta();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -67,7 +68,8 @@ class _AppHomeState extends State<AppHome> {
                       false, // Elimina todas las rutas anteriores
                 );
               },
-              icon: const Icon(Icons.logout))
+              icon: const Icon(Icons.logout),
+              color: Colors.white),
         ],
       ),
       body: <Widget>[const HomePage(), const MapTest()][_currPageIndex],

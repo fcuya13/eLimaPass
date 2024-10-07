@@ -1,5 +1,9 @@
 import 'package:elimapass/screens/tarjeta_page.dart';
+import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:flutter/material.dart';
+
+import '../models/entities/Viaje.dart';
+import '../widgets/ViajesList.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,11 +16,52 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _isVisible = false;
+  var _loading = false;
+  List<Viaje> _viajes = [];
+  TarjetaService tarjetaService = TarjetaService();
+  double _saldo = 0;
 
-  void _changeVisibility() {
+  Future<void> cargarViajes() async {
+    List<Viaje> listaViajes = await tarjetaService.getViajes();
+
     setState(() {
-      _isVisible = !_isVisible;
+      _viajes = listaViajes;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    cargarViajes();
+  }
+
+  void _changeVisibility() async {
+    if (_isVisible) {
+      setState(() {
+        _isVisible = !_isVisible;
+      });
+      return;
+    }
+
+    try {
+      setState(() {
+        _loading = true;
+      });
+      double saldoActual = await tarjetaService.getSaldo();
+      setState(() {
+        _saldo = saldoActual;
+        _isVisible = !_isVisible;
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ha ocurrido un error')),
+      );
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
   }
 
   @override
@@ -49,7 +94,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 24,
               ),
-              Saldo(),
+              Saldo(_saldo),
               const SizedBox(
                 height: 20,
               ),
@@ -60,6 +105,7 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              Expanded(child: ViajesList(viajes: _viajes)),
             ],
           ),
         ),
@@ -97,8 +143,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget Saldo() {
-    print(Theme.of(context).colorScheme.primary);
+  Widget Saldo(double saldo) {
     return Container(
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
@@ -127,9 +172,18 @@ class _HomePageState extends State<HomePage> {
               ),
               Visibility(
                 visible: _isVisible,
-                child: const Text(
-                  "S/. 10",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                child: Text(
+                  "S/. $saldo",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+              Visibility(
+                visible: _loading,
+                child: const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(),
                 ),
               )
             ],

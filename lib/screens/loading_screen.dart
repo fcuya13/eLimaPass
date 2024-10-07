@@ -1,16 +1,17 @@
 import 'package:elimapass/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-import '../services/user_provider.dart';
+import '../services/tarjeta_provider.dart';
 import 'app_home.dart';
 
 class LoadingScreen extends StatelessWidget {
   LoadingScreen({super.key});
 
-  UserProvider provider = UserProvider();
+  TarjetaProvider provider = TarjetaProvider();
 
   Future<void> checkLogin(BuildContext context) async {
-    String? loggedUser = await provider.getUser();
+    String? loggedUser = await provider.getTarjeta();
 
     await Future.delayed(const Duration(milliseconds: 1500));
 
@@ -27,6 +28,7 @@ class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     checkLogin(context);
+    initializeDateFormatting('es_ES');
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 60),

@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:elimapass/screens/register_page.dart';
+import 'package:elimapass/screens/login.dart'; // Importa la pantalla de login
 import 'package:elimapass/util/validators.dart';
 import 'package:elimapass/widgets/recovery_dialog.dart';
-import 'package:flutter/material.dart';
+import 'package:elimapass/util/constants.dart';
 
 import '../widgets/car_background.dart';
 
@@ -14,31 +18,95 @@ class RecoveryScreen extends StatefulWidget {
   }
 }
 
-class _RecoveryScreenState extends State<RecoveryScreen> with Validators{
+class _RecoveryScreenState extends State<RecoveryScreen> with Validators {
   var _dni = "";
   var _email = "";
+  bool _isLoading = false; // Controla la visibilidad del indicador de carga
 
   final _formKey = GlobalKey<FormState>();
 
-  void _submit() {
+  void _submit() async {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
-      showDialog(context: context, builder: (BuildContext context) {
-        return const RecoveryDialog();
+
+      setState(() {
+        _isLoading = true; // Mostrar el indicador de carga
       });
-      /*
-      Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) => const LoginScreen(),
-          )
-      );
-       */
+
+      // URL del backend de Django
+      final url = Uri.parse('${BACKEND_URL}elimapass/v1/recovery/');
+
+      try {
+        final response = await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
+            'dni': _dni,
+            'email': _email,
+          }),
+        );
+
+        setState(() {
+          _isLoading = false; // Ocultar el indicador de carga
+        });
+
+        if (response.statusCode == 200) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Recuperación Exitosa'),
+                content: const Text('Se ha enviado un enlace de recuperación a su correo.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Cerrar el diálogo
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(), // Redirigir a la pantalla de login
+                        ),
+                      );
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          // Manejar el error
+          showErrorDialog(context, 'Error al recuperar la contraseña. Verifique sus datos.');
+        }
+      } catch (error) {
+        setState(() {
+          _isLoading = false; // Ocultar el indicador de carga en caso de error
+        });
+        showErrorDialog(context, 'Hubo un error en la conexión. Inténtelo nuevamente.');
+      }
     }
-    print({
-      _dni,
-      _email,
-    });
+  }
+
+  void showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -69,7 +137,9 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators{
                       const SizedBox(
                         height: 20,
                       ),
-                      ElevatedButton(
+                      _isLoading
+                          ? const CircularProgressIndicator() // Mostrar indicador de carga si _isLoading es true
+                          : ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff111318),
                           foregroundColor: const Color(0XFFFFFFFF),
@@ -92,8 +162,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("¿No tienes una cuenta?",
-                              style:
-                              TextStyle(color: Colors.white, fontSize: 13)),
+                              style: TextStyle(color: Colors.white, fontSize: 13)),
                           const SizedBox(
                             width: 6,
                           ),
@@ -110,7 +179,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators{
                                     fontWeight: FontWeight.w800,
                                     fontSize: 14,
                                     color: Colors.white,
-                                  )))
+                                  ))),
                         ],
                       ),
                     ],
@@ -149,7 +218,7 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators{
           color: Color(0xff111318),
         ),
         validator: (value) => validateDni(value),
-        onSaved: (value){
+        onSaved: (value) {
           _dni = value!;
         },
       ),
@@ -177,12 +246,11 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators{
           fontWeight: FontWeight.w500,
           color: Color(0xff111318),
         ),
-        validator: (value)  => validateEmail(value),
-        onSaved: (value){
+        validator: (value) => validateEmail(value),
+        onSaved: (value) {
           _email = value!;
         },
       )
     ]);
   }
-
 }

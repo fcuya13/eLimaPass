@@ -85,7 +85,7 @@ class _AppHomeState extends State<AppHome> {
                   context: context,
                   builder: (BuildContext context) {
                     return const SizedBox(
-                      height: 300,
+                      height: 400,
                       child: AlertPage(),
                     );
                   },

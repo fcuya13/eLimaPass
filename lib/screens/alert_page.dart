@@ -17,6 +17,7 @@ class _AlertPageState extends State<AlertPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: const Color(0XFF405f90),
@@ -75,7 +76,7 @@ class _AlertPageState extends State<AlertPage> {
                 const SizedBox(height: 10),
                 // Container para limitar el ancho del campo de texto
                 SizedBox(
-                  width: 100,
+                  width: 200,
                   child: TextFormField(
                     textAlign: TextAlign.center,
                     controller: _controller,

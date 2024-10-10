@@ -24,4 +24,24 @@ class TarjetaProvider {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('tarjeta_id');
   }
+
+  static const String _saldoMinimoKey = 'saldoMinimo';
+
+  // Guardar el saldo mínimo
+  Future<void> setSaldoMinimo(double saldo) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_saldoMinimoKey, saldo);
+  }
+
+  // Obtener el saldo mínimo guardado
+  Future<double?> getSaldoMinimo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(_saldoMinimoKey);
+  }
+
+  // Eliminar el saldo mínimo guardado (opcional)
+  Future<void> removeSaldoMinimo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_saldoMinimoKey);
+  }
 }

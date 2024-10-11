@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ha ocurrido un error')),
+        const SnackBar(content: Text('Ha ocurrido un error')),
       );
     } finally {
       setState(() {
@@ -47,12 +47,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     cargarViajes();
   }
 
-  void _changeVisibility() async {
+  void _cargarSaldo() async {
     if (_loading) return;
     if (_isVisible) {
       setState(() {
@@ -73,7 +72,7 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ha ocurrido un error')),
+        const SnackBar(content: Text('Ha ocurrido un error')),
       );
     } finally {
       setState(() {
@@ -223,7 +222,7 @@ class _HomePageState extends State<HomePage> {
           ),
           GestureDetector(
             onTap: () {
-              _changeVisibility();
+              _cargarSaldo();
             },
             child: _isVisible
                 ? const Icon(Icons.visibility_off)

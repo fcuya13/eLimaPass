@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:elimapass/screens/register_page.dart';
 import 'package:elimapass/screens/login.dart'; // Importa la pantalla de login
 import 'package:elimapass/util/validators.dart';
-import 'package:elimapass/widgets/recovery_dialog.dart';
 import 'package:elimapass/util/constants.dart';
 
 import '../widgets/car_background.dart';

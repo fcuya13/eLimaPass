@@ -55,4 +55,25 @@ class TarjetaService {
       throw Exception('Ha ocurrido un error desconocido. Inténtelo más tarde');
     }
   }
+
+  Future<void> setLimite(double limite) async {
+    String? tarjetaId = await provider.getTarjeta();
+
+    if (tarjetaId == null) {
+      throw Exception("Ha ocurrido un error");
+    }
+
+    var url = "$_baseUrl$tarjetaId/cambiar-limite/";
+
+    var body = {"limite": limite};
+
+    final response =
+        await http.put(Uri.parse(url), body: jsonEncode(body), headers: {
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode != 200) {
+      throw Exception('Ha ocurrido un error desconocido. Inténtelo más tarde');
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:elimapass/services/notification_service.dart';
+import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:flutter/material.dart';
-import 'package:elimapass/services/tarjeta_provider.dart';
 
 class AlertPage extends StatefulWidget {
   const AlertPage({super.key});
@@ -12,7 +12,33 @@ class AlertPage extends StatefulWidget {
 class _AlertPageState extends State<AlertPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _controller = TextEditingController();
-  final TarjetaProvider _tarjetaProvider = TarjetaProvider();
+  final TarjetaService _tarjetaService = TarjetaService();
+
+  Future<void> onSubmit() async {
+    if (_formKey.currentState!.validate()) {
+      // Acción al enviar la cantidad numérica
+      double saldoMinimo = double.parse(_controller.text);
+
+      // Guardar el saldo mínimo configurado
+      await _tarjetaService.provider.setSaldoMinimo(saldoMinimo);
+
+      try {
+        await _tarjetaService.setLimite(saldoMinimo);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text("Ha ocurrido un error. Inténtelo más tarde")),
+        );
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Cantidad guardada: S/. $saldoMinimo")),
+      );
+      showNotification("Alerta configurada",
+          "Se ha configurado una alerta de saldo bajo de S/. $saldoMinimo");
+      Navigator.of(context).pop();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +70,7 @@ class _AlertPageState extends State<AlertPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Text(
-                  "Ingrese la cantidad mínima de saldo",
+                  "Ingrese el límite de alerta",
                   style: TextStyle(fontSize: 18),
                 ),
                 IconButton(
@@ -123,20 +149,7 @@ class _AlertPageState extends State<AlertPage> {
                       borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  onPressed: () async{
-                    if (_formKey.currentState!.validate()) {
-                      // Acción al enviar la cantidad numérica
-                      double saldoMinimo = double.parse(_controller.text);
-
-                      // Guardar el saldo mínimo configurado
-                      await _tarjetaProvider.setSaldoMinimo(saldoMinimo);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Cantidad guardada: S/. $saldoMinimo")),
-                      );
-                      showNotification("Alerta configurada",
-                          "Se ha configurado una alerta de saldo bajo de S/. $saldoMinimo");
-                    }
-                  },
+                  onPressed: onSubmit,
                   child: const Text(
                     "Guardar",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),

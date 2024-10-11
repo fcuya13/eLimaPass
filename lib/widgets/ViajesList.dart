@@ -6,7 +6,7 @@ import 'ViajeItem.dart';
 class ViajesList extends StatelessWidget {
   final List<Viaje> viajes;
 
-  ViajesList({required this.viajes});
+  const ViajesList({super.key, required this.viajes});
 
   @override
   Widget build(BuildContext context) {

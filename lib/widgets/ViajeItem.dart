@@ -6,13 +6,13 @@ import '../models/entities/Viaje.dart';
 class ViajeItem extends StatelessWidget {
   final Viaje viaje;
 
-  ViajeItem({required this.viaje});
+  const ViajeItem({super.key, required this.viaje});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
+      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
       child: Row(
         children: [
           Expanded(
@@ -22,15 +22,15 @@ class ViajeItem extends StatelessWidget {
               children: [
                 Text(
                   'Línea: ${viaje.ruta}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18.0,
                   ),
                 ),
-                SizedBox(height: 4.0),
+                const SizedBox(height: 4.0),
                 Text(
-                  '${DateFormat("dd MMM yyyy - h.mma", 'es_ES').format(viaje.fechaHora)}',
-                  style: TextStyle(
+                  DateFormat("dd MMM yyyy - h.mma", 'es_ES').format(viaje.fechaHora),
+                  style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 14.0,
                   ),
@@ -42,7 +42,7 @@ class ViajeItem extends StatelessWidget {
             flex: 1,
             child: Text(
               '-S/.${viaje.precioFinal.toStringAsFixed(2)}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,
                 color: Colors.red,

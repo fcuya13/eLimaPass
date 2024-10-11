@@ -1,5 +1,6 @@
 import 'package:elimapass/screens/loading_screen.dart';
 import 'package:elimapass/services/notification_service.dart';
+import 'package:elimapass/util/notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,6 +14,7 @@ var darkColorScheme = ColorScheme.fromSeed(
 );
 
 void main() async {
+  AppNotifier().notified = false;
   WidgetsFlutterBinding.ensureInitialized();
   await initNotifications();
   SystemChrome.setPreferredOrientations([

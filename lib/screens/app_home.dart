@@ -1,9 +1,9 @@
 import 'package:elimapass/screens/map_test.dart';
-import 'package:elimapass/services/tarjeta_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:elimapass/services/notification_service.dart';
+import 'package:elimapass/services/tarjeta_service.dart';
+import 'package:flutter/material.dart';
 
+import '../util/notifier.dart';
 import 'alert_page.dart';
 import 'home_page.dart';
 import 'login.dart';
@@ -19,10 +19,9 @@ class AppHome extends StatefulWidget {
 
 class _AppHomeState extends State<AppHome> {
   int _currPageIndex = 0;
-  TarjetaProvider provider = TarjetaProvider();
-  TarjetaService _tarjetaService = TarjetaService();
-  TarjetaProvider _tarjetaProvider = TarjetaProvider();
+  final TarjetaService _tarjetaService = TarjetaService();
 
+  @override
   void initState() {
     super.initState();
     _checkSaldo();
@@ -31,18 +30,18 @@ class _AppHomeState extends State<AppHome> {
   Future<void> _checkSaldo() async {
     try {
       // Obtener el saldo mínimo guardado
-      double? saldoMinimo = await _tarjetaProvider.getSaldoMinimo();
+      double? saldoMinimo = await _tarjetaService.provider.getSaldoMinimo();
+      double saldoActual = await _tarjetaService.getSaldo();
+      bool? hasBeenNotified = AppNotifier().notified;
 
-      if (saldoMinimo != null) {
-        // Obtener el saldo actual desde la API
-        double saldoActual = await _tarjetaService.getSaldo();
+      if (saldoMinimo == null || hasBeenNotified == null) return;
+      // Obtener el saldo actual desde la API
 
-        // Comparar el saldo actual con el mínimo configurado
-        if (saldoActual < saldoMinimo) {
-          // Mostrar la notificación
-          showNotification("Saldo bajo",
-              "El saldo de tu tarjeta es de S/. $saldoActual. ¡Recarga pronto!");
-        }
+      if (saldoActual < saldoMinimo && hasBeenNotified) {
+        hasBeenNotified = true;
+        // Mostrar la notificación
+        showNotification("Saldo bajo",
+            "El saldo de tu tarjeta es de S/. $saldoActual. ¡Recarga pronto!");
       }
     } catch (e) {
       print("Error al verificar el saldo: $e");
@@ -95,7 +94,7 @@ class _AppHomeState extends State<AppHome> {
               color: Colors.white),
           IconButton(
               onPressed: () async {
-                await provider.removeTarjeta();
+                await _tarjetaService.provider.removeTarjeta();
 
                 Navigator.pushAndRemoveUntil(
                   context,

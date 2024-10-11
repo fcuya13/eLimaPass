@@ -9,8 +9,8 @@ class RecoveryDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      title: Row(
-        children: const [
+      title: const Row(
+        children: [
           Icon(Icons.check_circle, color: Colors.green, size: 30),
           SizedBox(width: 10),
           Text(

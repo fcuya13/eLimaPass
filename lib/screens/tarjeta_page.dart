@@ -1,4 +1,7 @@
+import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:flutter/material.dart';
+import 'package:nfc_manager/nfc_manager.dart';
+import 'dart:typed_data';
 
 class TarjetaPage extends StatefulWidget {
   const TarjetaPage({super.key});
@@ -10,6 +13,15 @@ class TarjetaPage extends StatefulWidget {
 }
 
 class _TarjetaPageState extends State<TarjetaPage> {
+  bool _isWriting = false;
+  final TarjetaService _tarjetaService = TarjetaService();
+
+  @override
+  void initState() {
+    super.initState();
+    _startNFCWriting();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,5 +66,41 @@ class _TarjetaPageState extends State<TarjetaPage> {
         ],
       ),
     );
+  }
+
+  void _startNFCWriting() async {
+    try {
+      bool isAvailable = await NfcManager.instance.isAvailable();
+      String? tarjetaId = await _tarjetaService.provider.getTarjeta();
+
+      if (tarjetaId == null) {
+        throw ("Error inesperado");
+      }
+
+      if (isAvailable && !_isWriting) {
+        _isWriting = true;
+        await NfcManager.instance.startSession(
+            onDiscovered: (NfcTag tag) async {
+          try {
+            NdefMessage message =
+                NdefMessage([NdefRecord.createText(tarjetaId)]);
+            await Ndef.from(tag)?.write(message);
+            Uint8List payload = message.records.first.payload;
+            String text = String.fromCharCodes(payload);
+            debugPrint("Written data: $text");
+            Navigator.pop(context);
+          } catch (e) {
+            debugPrint('Error emitting NFC data: $e');
+          } finally {
+            NfcManager.instance.stopSession();
+            _isWriting = false;
+          }
+        });
+      } else {
+        debugPrint('NFC not available or already writing.');
+      }
+    } catch (e) {
+      debugPrint('Error writing to NFC: $e');
+    }
   }
 }

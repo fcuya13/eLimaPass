@@ -37,7 +37,7 @@ class _AppHomeState extends State<AppHome> {
       if (saldoMinimo == null || hasBeenNotified == null) return;
       // Obtener el saldo actual desde la API
 
-      if (saldoActual < saldoMinimo && hasBeenNotified) {
+      if (saldoActual < saldoMinimo && !hasBeenNotified) {
         hasBeenNotified = true;
         // Mostrar la notificación
         showNotification("Saldo bajo",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nfc_manager/nfc_manager.dart';
 import 'dart:typed_data';
 
+
 class TarjetaPage extends StatefulWidget {
   const TarjetaPage({super.key});
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-class RecoveryDialog extends StatelessWidget {
-  const RecoveryDialog({super.key});
+import '../screens/app_home.dart';
+
+class PaymentDialog extends StatelessWidget {
+  const PaymentDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +16,13 @@ class RecoveryDialog extends StatelessWidget {
           Icon(Icons.check_circle, color: Colors.green, size: 30),
           SizedBox(width: 10),
           Text(
-            "Contraseña Recuperada",
+            "¡Recarga exitosa!",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ],
       ),
       content: const Text(
-        "Tu contraseña ha sido cambiada exitosamente. Por favor, inicia sesión con tu nueva contraseña.",
+        "El pago se realizado de manera exitosa. Verás tu nuevo saldo en breve",
         style: TextStyle(fontSize: 16),
       ),
       actions: [
@@ -32,7 +34,11 @@ class RecoveryDialog extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pop();
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (ctx) => const AppHome(),
+                ),
+                (Route<dynamic> route) => false);
           },
           child: const Text(
             "Aceptar",

@@ -1,3 +1,4 @@
+import 'package:elimapass/screens/payments/payment_select_page.dart';
 import 'package:elimapass/screens/tarjeta_page.dart';
 import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:flutter/material.dart';
@@ -154,7 +155,14 @@ class _HomePageState extends State<HomePage> {
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => const PaymentSelectPage(),
+                ),
+              );
+            },
             child: const Row(
               children: [
                 Icon(Icons.wallet),

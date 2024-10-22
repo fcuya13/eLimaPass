@@ -15,6 +15,7 @@ class _AlertPageState extends State<AlertPage> {
   final TarjetaService _tarjetaService = TarjetaService();
 
   Future<void> onSubmit() async {
+    ScaffoldMessenger.of(context).clearSnackBars();
     if (_formKey.currentState!.validate()) {
       // Acción al enviar la cantidad numérica
       double saldoMinimo = double.parse(_controller.text);

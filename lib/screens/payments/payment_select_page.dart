@@ -1,5 +1,5 @@
 import 'package:elimapass/screens/payments/billetera_digital_page.dart';
-import 'package:elimapass/screens/payments/creditdebit_page.dart';
+import 'package:elimapass/screens/payments/tarjeta_creditdebit_page.dart';
 import 'package:flutter/material.dart';
 
 class PaymentSelectPage extends StatefulWidget {

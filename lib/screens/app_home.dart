@@ -44,7 +44,7 @@ class _AppHomeState extends State<AppHome> {
             "El saldo de tu tarjeta es de S/. $saldoActual. ¡Recarga pronto!");
       }
     } catch (e) {
-      print("Error al verificar el saldo: $e");
+      debugPrint("Error al verificar el saldo: $e");
     }
   }
 

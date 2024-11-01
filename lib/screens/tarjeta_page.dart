@@ -31,7 +31,7 @@ class _TarjetaPageState extends State<TarjetaPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 600), connect);
+    Future.delayed(const Duration(milliseconds: 700), connect);
     peer.on<DataConnection>("connection").listen((event) {
       conn = event;
 

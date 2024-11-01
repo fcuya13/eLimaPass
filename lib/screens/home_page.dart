@@ -211,7 +211,7 @@ class _HomePageState extends State<HomePage> {
               Visibility(
                 visible: _isVisible,
                 child: Text(
-                  "S/. $saldo",
+                  "S/. ${saldo.toStringAsFixed(2)}",
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 18),
                 ),

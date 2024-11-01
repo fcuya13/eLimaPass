@@ -12,7 +12,6 @@ class TarjetaProvider {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('tarjeta_id');
 
-    print(userId);
     if (userId != null) {
       return userId;
     }

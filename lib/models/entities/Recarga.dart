@@ -14,8 +14,8 @@ class Recarga {
   factory Recarga.fromJson(Map<String, dynamic> json) {
     return Recarga(
       id: json['id'],
-      fechaHora: DateTime.parse(json['fecha_hora']),
-      monto: json['monto'],
+      fechaHora: DateTime.parse(json['fecha']),
+      monto: json['monto_recargado'],
       medioPago: json['medio_pago'],
     );
   }

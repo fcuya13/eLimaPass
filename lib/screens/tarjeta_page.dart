@@ -132,7 +132,7 @@ class _TarjetaPageState extends State<TarjetaPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   status == PagoStatus.PENDING
-                      ? "Presiona el botón para realizar tu pago"
+                      ? "Acerca tu celular para realizar el pago"
                       : status == PagoStatus.EXITOSO
                           ? "¡Pago exitoso!"
                           : "!Saldo insuficiente!",

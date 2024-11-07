@@ -29,7 +29,8 @@ class ViajeItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 4.0),
                 Text(
-                  DateFormat("dd MMM yyyy - h.mma", 'es_ES').format(viaje.fechaHora),
+                  DateFormat("dd MMM yyyy - h.mma", 'es_ES')
+                      .format(viaje.fechaHora),
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 14.0,
@@ -41,7 +42,7 @@ class ViajeItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              '-S/.${viaje.precioFinal.toStringAsFixed(2)}',
+              '- S/.${viaje.precioFinal.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,

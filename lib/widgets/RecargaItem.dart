@@ -43,7 +43,7 @@ class RecargaItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Text(
-              '+S/.${recarga.monto.toStringAsFixed(2)}',
+              '+ S/.${recarga.monto.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 18.0,

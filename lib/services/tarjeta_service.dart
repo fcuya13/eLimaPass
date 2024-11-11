@@ -104,7 +104,7 @@ class TarjetaService {
       throw Exception("Ha ocurrido un error");
     }
 
-    var url = "${BACKEND_URL}/elimapass/v1/recargas/";
+    var url = "${BACKEND_URL}elimapass/v1/recargar/";
 
     var body = {
       "codigo_tarjeta": tarjetaId,
@@ -113,13 +113,14 @@ class TarjetaService {
     };
 
     final response =
-    await http.post(Uri.parse(url), body: jsonEncode(body), headers: {
+        await http.post(Uri.parse(url), body: jsonEncode(body), headers: {
       'Content-Type': 'application/json',
     });
 
     if (response.statusCode != 201) {
       throw Exception('Ha ocurrido un error desconocido. Inténtelo más tarde');
     }
+    print(response.body);
     return true;
   }
 }

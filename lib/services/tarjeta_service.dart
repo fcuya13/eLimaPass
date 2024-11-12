@@ -97,4 +97,30 @@ class TarjetaService {
       throw Exception('Ha ocurrido un error desconocido. Inténtelo más tarde');
     }
   }
+
+  Future<bool> setRecarga(double monto, String medio_pago) async {
+    String? tarjetaId = await provider.getTarjeta();
+    if (tarjetaId == null) {
+      throw Exception("Ha ocurrido un error");
+    }
+
+    var url = "${BACKEND_URL}elimapass/v1/recargar/";
+
+    var body = {
+      "codigo_tarjeta": tarjetaId,
+      "monto_recargado": monto,
+      "medio_pago": medio_pago
+    };
+
+    final response =
+        await http.post(Uri.parse(url), body: jsonEncode(body), headers: {
+      'Content-Type': 'application/json',
+    });
+
+    if (response.statusCode != 201) {
+      throw Exception('Ha ocurrido un error desconocido. Inténtelo más tarde');
+    }
+    print(response.body);
+    return true;
+  }
 }

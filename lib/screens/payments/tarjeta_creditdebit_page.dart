@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:u_credit_card/u_credit_card.dart';
+import '/services/tarjeta_service.dart';
 
 import '../../widgets/PaymentDialog.dart';
 
@@ -15,6 +16,7 @@ class CreditDebitPage extends StatefulWidget {
 }
 
 class _CreditDebitPageState extends State<CreditDebitPage> {
+  TarjetaService tarjetaService = TarjetaService();
   var _cardHolder = "";
   var _cardNumber = "";
   var _expDate = "";
@@ -29,7 +31,7 @@ class _CreditDebitPageState extends State<CreditDebitPage> {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       try {
-        //await _loginService.login(_dni, _password);
+        bool? response = await tarjetaService.setRecarga(widget.montoARecargar, "tarjeta");
         // pago
 
         showDialog(

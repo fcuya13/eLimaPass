@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-
+import '/services/tarjeta_service.dart';
 import '../../widgets/PaymentDialog.dart';
 
 class BilleteraDigitalPage extends StatefulWidget {
@@ -15,6 +15,7 @@ class BilleteraDigitalPage extends StatefulWidget {
 }
 
 class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
+  TarjetaService tarjetaService = TarjetaService();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _codigoAprobacion = TextEditingController();
   var loading = false;
@@ -28,7 +29,7 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       try {
-        //await _loginService.login(_dni, _password);
+        bool? response = await tarjetaService.setRecarga(widget.montoARecargar, "yape");
         // pago
 
         showDialog(

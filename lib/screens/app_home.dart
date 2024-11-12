@@ -1,4 +1,4 @@
-import 'package:elimapass/screens/map_test.dart';
+import 'package:elimapass/screens/maps/rutas_page.dart';
 import 'package:elimapass/services/notification_service.dart';
 import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:flutter/material.dart';
@@ -78,20 +78,21 @@ class _AppHomeState extends State<AppHome> {
           ),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const SizedBox(
-                      height: 400,
-                      child: AlertPage(),
-                    );
-                  },
-                );
-              },
-              icon: const Icon(Icons.add_alert),
-              color: Colors.white),
+          if (_currPageIndex == 0)
+            IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const SizedBox(
+                        height: 400,
+                        child: AlertPage(),
+                      );
+                    },
+                  );
+                },
+                icon: const Icon(Icons.add_alert),
+                color: Colors.white),
           IconButton(
               onPressed: () async {
                 await _tarjetaService.provider.removeTarjeta();
@@ -107,7 +108,7 @@ class _AppHomeState extends State<AppHome> {
               color: Colors.white),
         ],
       ),
-      body: <Widget>[const HomePage(), const MapTest()][_currPageIndex],
+      body: <Widget>[const HomePage(), const RutasPage()][_currPageIndex],
       bottomNavigationBar: NavigationBar(
         height: 65,
         onDestinationSelected: (int index) {

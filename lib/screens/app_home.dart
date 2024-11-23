@@ -1,4 +1,5 @@
 import 'package:elimapass/screens/maps/rutas_page.dart';
+import 'package:elimapass/screens/profile/user_page.dart';
 import 'package:elimapass/services/notification_service.dart';
 import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:flutter/material.dart';
@@ -59,9 +60,14 @@ class _AppHomeState extends State<AppHome> {
       selectedIcon: Icon(Icons.map),
       label: 'Rutas',
     ),
+    const NavigationDestination(
+      icon: Icon(Icons.person_pin_outlined),
+      selectedIcon: Icon(Icons.person_pin),
+      label: 'Perfil',
+    ),
   ];
 
-  final appbarTitles = ["Mi eLimaPass", "Rutas y Paraderos"];
+  final appbarTitles = ["Mi eLimaPass", "Rutas y Paraderos", "Mi perfil"];
 
   @override
   Widget build(BuildContext context) {
@@ -93,22 +99,28 @@ class _AppHomeState extends State<AppHome> {
                 },
                 icon: const Icon(Icons.add_alert),
                 color: Colors.white),
-          IconButton(
-              onPressed: () async {
-                await _tarjetaService.provider.removeTarjeta();
+          if (_currPageIndex == 2)
+            IconButton(
+                onPressed: () async {
+                  await _tarjetaService.provider.removeTarjeta();
 
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (Route<dynamic> route) =>
-                      false, // Elimina todas las rutas anteriores
-                );
-              },
-              icon: const Icon(Icons.logout),
-              color: Colors.white),
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
+                    (Route<dynamic> route) =>
+                        false, // Elimina todas las rutas anteriores
+                  );
+                },
+                icon: const Icon(Icons.logout),
+                color: Colors.white),
         ],
       ),
-      body: <Widget>[const HomePage(), const RutasPage()][_currPageIndex],
+      body: <Widget>[
+        const HomePage(),
+        const RutasPage(),
+        const UserPage()
+      ][_currPageIndex],
       bottomNavigationBar: NavigationBar(
         height: 65,
         onDestinationSelected: (int index) {

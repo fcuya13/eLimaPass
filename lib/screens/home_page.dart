@@ -3,6 +3,7 @@ import 'package:elimapass/screens/tarjeta_page.dart';
 import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:flutter/material.dart';
 
+import '../models/entities/Tarjeta.dart';
 import '../models/entities/Viaje.dart';
 import '../widgets/ViajesList.dart';
 
@@ -22,6 +23,18 @@ class _HomePageState extends State<HomePage> {
   List<Viaje> _viajes = [];
   TarjetaService tarjetaService = TarjetaService();
   double _saldo = 0;
+  bool tipo = false;
+
+  void cargarTipo() async {
+    Tarjeta? tarjeta = await tarjetaService.provider.getTarjeta();
+
+    if (tarjeta == null) return;
+    if (tarjeta.tipo == 1) {
+      setState(() {
+        tipo = true;
+      });
+    }
+  }
 
   void cargarViajes() async {
     if (_loadingViajes) return;
@@ -49,6 +62,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    cargarTipo();
     cargarViajes();
   }
 
@@ -96,14 +110,20 @@ class _HomePageState extends State<HomePage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25),
                   child: GestureDetector(
-                    child: const Image(
-                      image: AssetImage('assets/lima_pass.jpg'),
-                    ),
+                    child: tipo == false
+                        ? const Image(
+                            image: AssetImage('assets/lima_pass.jpg'),
+                          )
+                        : const Image(
+                            image: AssetImage('assets/lima_pass_rojo.jpg'),
+                          ),
                     onTap: () => {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (ctx) => const TarjetaPage(),
+                            builder: (ctx) => TarjetaPage(
+                              tipo: tipo,
+                            ),
                           ))
                     },
                   ),

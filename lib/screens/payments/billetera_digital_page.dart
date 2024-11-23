@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
 import '/services/tarjeta_service.dart';
 import '../../widgets/PaymentDialog.dart';
 
@@ -20,7 +21,6 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
   final TextEditingController _codigoAprobacion = TextEditingController();
   var loading = false;
   var _hasError = false;
-  var _phoneNumber = "";
 
   void _submit() async {
     setState(() {
@@ -29,7 +29,7 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       try {
-        bool? response = await tarjetaService.setRecarga(widget.montoARecargar, "yape");
+        await tarjetaService.setRecarga(widget.montoARecargar, "yape");
         // pago
 
         showDialog(
@@ -107,11 +107,6 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(9),
                     ],
-                    onChanged: (value) {
-                      setState(() {
-                        _phoneNumber = value;
-                      });
-                    },
                     validator: (value) {
                       if (value == null || value.isEmpty || value.length != 9) {
                         return 'Ingrese un número de celular válido';

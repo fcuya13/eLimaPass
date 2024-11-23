@@ -3,10 +3,12 @@ import 'package:elimapass/services/tarjeta_service.dart';
 import 'package:flutter/material.dart';
 import 'package:peerdart/peerdart.dart';
 
+import '../models/entities/Tarjeta.dart';
 import 'app_home.dart';
 
 class TarjetaPage extends StatefulWidget {
-  const TarjetaPage({super.key});
+  final bool tipo;
+  const TarjetaPage({super.key, required this.tipo});
 
   @override
   State<StatefulWidget> createState() {
@@ -51,10 +53,10 @@ class _TarjetaPageState extends State<TarjetaPage> {
     setState(() {
       loading = true;
     });
-    String? id = await tarjetaService.provider.getTarjeta();
+    Tarjeta? tarjeta = await tarjetaService.provider.getTarjeta();
 
-    if (id == null) return;
-    conn.send(id);
+    if (tarjeta == null) return;
+    conn.send(tarjeta.id);
   }
 
   void connect() {
@@ -172,9 +174,13 @@ class _TarjetaPageState extends State<TarjetaPage> {
                 tag: 'tarjeta',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(25),
-                  child: const Image(
-                    image: AssetImage('assets/lima_pass.jpg'),
-                  ),
+                  child: widget.tipo == false
+                      ? const Image(
+                          image: AssetImage('assets/lima_pass.jpg'),
+                        )
+                      : const Image(
+                          image: AssetImage('assets/lima_pass_rojo.jpg'),
+                        ),
                 ),
               ),
             ],

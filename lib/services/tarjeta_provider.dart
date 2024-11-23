@@ -1,3 +1,4 @@
+import 'package:elimapass/models/entities/Tarjeta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/responses/LoginResponse.dart';
@@ -6,14 +7,16 @@ class TarjetaProvider {
   Future<void> saveTarjeta(LoginResponse userData) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('tarjeta_id', userData.tarjeta);
+    await prefs.setInt('tarjeta_tipo', userData.tipo);
   }
 
-  Future<String?> getTarjeta() async {
+  Future<Tarjeta?> getTarjeta() async {
     final prefs = await SharedPreferences.getInstance();
     final userId = prefs.getString('tarjeta_id');
+    final tipo = prefs.getInt('tarjeta_tipo');
 
-    if (userId != null) {
-      return userId;
+    if (userId != null && tipo != null) {
+      return Tarjeta(id: userId, tipo: tipo);
     }
 
     return null;
@@ -43,6 +46,4 @@ class TarjetaProvider {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove(_saldoMinimoKey);
   }
-
-
 }

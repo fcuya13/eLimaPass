@@ -15,7 +15,7 @@ class RecargasResponse {
         recargasJson.map((i) => Recarga.fromJson(i)).toList();
 
     return RecargasResponse(
-      codigoTarjeta: json['codigo_tarjeta'],
+      codigoTarjeta: json['codigoTarjeta'],
       recargas: recargasList,
     );
   }

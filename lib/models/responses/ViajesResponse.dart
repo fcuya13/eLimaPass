@@ -14,7 +14,7 @@ class ViajesResponse {
     List<Viaje> viajesList = viajesJson.map((i) => Viaje.fromJson(i)).toList();
 
     return ViajesResponse(
-      codigoTarjeta: json['codigo_tarjeta'],
+      codigoTarjeta: json['codigoTarjeta'],
       viajes: viajesList,
     );
   }

@@ -12,7 +12,7 @@ import 'package:multi_image_picker_view/multi_image_picker_view.dart';
 import '../util/constants.dart';
 
 class TarjetaService {
-  static const String _baseUrl = '${BACKEND_URL}elimapass/v1/tarjetas/';
+  static const String _baseUrl = '${BACKEND_URL}elimapass/v1/tarjetas';
   TarjetaProvider provider = TarjetaProvider();
 
   Future<double> getSaldo() async {
@@ -22,7 +22,7 @@ class TarjetaService {
       throw Exception("Ha ocurrido un error");
     }
 
-    var url = "$_baseUrl${tarjeta.id}/saldo/";
+    var url = "$_baseUrl/${tarjeta.id}/saldo";
 
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
@@ -44,11 +44,12 @@ class TarjetaService {
       throw Exception("Ha ocurrido un error");
     }
 
-    var url = "$_baseUrl${tarjeta.id}/viajes/";
+    var url = "$_baseUrl/${tarjeta.id}/viajes";
 
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
+    print(response.body);
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
@@ -66,7 +67,7 @@ class TarjetaService {
       throw Exception("Ha ocurrido un error");
     }
 
-    var url = "$_baseUrl${tarjeta.id}/cambiar-limite/";
+    var url = "$_baseUrl${tarjeta.id}/cambiar-limite";
 
     var body = {"limite": limite};
 
@@ -87,11 +88,13 @@ class TarjetaService {
       throw Exception("Ha ocurrido un error");
     }
 
-    var url = "$_baseUrl${tarjeta.id}/recargas/";
+    var url = "$_baseUrl/${tarjeta.id}/recargas";
 
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
+
+    print(response.body);
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final recargasResponse = RecargasResponse.fromJson(json);
@@ -108,7 +111,7 @@ class TarjetaService {
       throw Exception("Ha ocurrido un error");
     }
 
-    var url = "${BACKEND_URL}elimapass/v1/recargar/";
+    var url = "${BACKEND_URL}elimapass/v1/recargar";
 
     var body = {
       "codigo_tarjeta": tarjeta.id,
@@ -134,7 +137,7 @@ class TarjetaService {
     required String codigoTarjeta,
   }) async {
     final url = Uri.parse(
-        '$BACKEND_URL/elimapass/v1/solicitudes/'); // Cambia esto por tu URL.
+        '$BACKEND_URL/elimapass/v1/solicitudes'); // Cambia esto por tu URL.
 
     final request = http.MultipartRequest('POST', url);
 

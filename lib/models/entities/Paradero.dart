@@ -14,10 +14,10 @@ class Paradero {
 
   factory Paradero.fromJson(Map<String, dynamic> json) {
     return Paradero(
-        id: json['id'],
+        id: json['id'].toString(),
         nombre: json['nombre'],
-        latitud: json['latitud'],
-        longitud: json['longitud'],
-        sentidoIda: json['sentido_ida']);
+        latitud: json['latitud'].toString(),
+        longitud: json['longitud'].toString(),
+        sentidoIda: json['sentidoIda']);
   }
 }

@@ -14,9 +14,9 @@ class Viaje {
   factory Viaje.fromJson(Map<String, dynamic> json) {
     return Viaje(
       id: json['id'],
-      fechaHora: DateTime.parse(json['fecha_hora']),
+      fechaHora: DateTime.parse(json['fechaHora']),
       ruta: json['ruta'],
-      precioFinal: json['precio_final'],
+      precioFinal: json['precioFinal'],
     );
   }
 }

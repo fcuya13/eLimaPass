@@ -15,8 +15,8 @@ class Recarga {
     return Recarga(
       id: json['id'],
       fechaHora: DateTime.parse(json['fecha']),
-      monto: json['monto_recargado'],
-      medioPago: json['medio_pago'],
+      monto: json['montoRecargado'],
+      medioPago: json['medioPago'],
     );
   }
 }

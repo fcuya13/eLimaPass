@@ -15,7 +15,7 @@ class Ruta {
         id: json['id'],
         nombre: json['nombre'],
         inicio: json['inicio'],
-        fin: json['final']);
+        fin: json['finalDestino']);
   }
 
   // Método para serializar Ruta a JSON

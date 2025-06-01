@@ -11,11 +11,12 @@ class MapService {
   static const String _baseUrl = '${BACKEND_URL}elimapass/v1/';
 
   Future<RutaResponse> getRutas() async {
-    var url = "${_baseUrl}rutas/";
+    var url = "${_baseUrl}rutas";
 
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
+    print(response.body);
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final rutasResponse = RutaResponse.fromJson(json);
@@ -30,9 +31,10 @@ class MapService {
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
+
+    print(response.body);
     if (response.statusCode == 200) {
       final json = jsonDecode(utf8.decode(response.bodyBytes));
-      print(json);
       final paraderos = ParaderoResponse.fromJson(json);
       return paraderos.paraderos;
     } else {

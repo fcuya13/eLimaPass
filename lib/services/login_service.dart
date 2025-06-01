@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 class LoginService {
   TarjetaProvider provider = TarjetaProvider();
-  static const String _baseUrl = '${BACKEND_URL}elimapass/v1/login/';
+  static const String _baseUrl = '${BACKEND_URL}elimapass/v1/login';
 
   Future<void> login(String dni, String password) async {
     final response = await http.post(

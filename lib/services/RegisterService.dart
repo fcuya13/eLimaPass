@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import '../util/constants.dart';
 
 class RegisterService {
-  static const String _baseUrl = '${BACKEND_URL}elimapass/v1/signup/';
+  static const String _baseUrl = '${BACKEND_URL}elimapass/v1/signup';
 
   Future<void> register(String dni, String email, String nombres,
       String apellidos, String password, String numTarjeta) async {

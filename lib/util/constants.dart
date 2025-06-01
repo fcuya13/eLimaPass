@@ -1,2 +1,2 @@
-const BACKEND_URL =
-    "https://cautious-space-sniffle-ww9j6wppwgp2q47-8000.app.github.dev/";
+const BACKEND_URL = String.fromEnvironment('API_BASE_URL',
+    defaultValue: "http://192.168.1.48:8080/");

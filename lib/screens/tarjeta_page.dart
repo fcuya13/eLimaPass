@@ -50,12 +50,14 @@ class _TarjetaPageState extends State<TarjetaPage> {
   }
 
   void sendTarjeta() async {
+    print("SENDING");
     setState(() {
       loading = true;
     });
     Tarjeta? tarjeta = await tarjetaService.provider.getTarjeta();
-
+    print(tarjeta);
     if (tarjeta == null) return;
+    print(tarjeta.id);
     conn.send(tarjeta.id);
   }
 

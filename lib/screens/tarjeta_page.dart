@@ -50,14 +50,11 @@ class _TarjetaPageState extends State<TarjetaPage> {
   }
 
   void sendTarjeta() async {
-    print("SENDING");
     setState(() {
       loading = true;
     });
     Tarjeta? tarjeta = await tarjetaService.provider.getTarjeta();
-    print(tarjeta);
     if (tarjeta == null) return;
-    print(tarjeta.id);
     conn.send(tarjeta.id);
   }
 
@@ -90,15 +87,18 @@ class _TarjetaPageState extends State<TarjetaPage> {
         setState(() {
           loading = false;
         });
+
         Future.delayed(
             const Duration(
               milliseconds: 2500,
             ), () {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (ctx) => const AppHome(),
-              ),
-              (Route<dynamic> route) => false);
+          if (mounted) {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (ctx) => const AppHome(),
+                ),
+                (Route<dynamic> route) => false);
+          }
         });
       });
     });
@@ -141,7 +141,8 @@ class _TarjetaPageState extends State<TarjetaPage> {
                           ? "¡Pago exitoso!"
                           : "!Saldo insuficiente!",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.w600),
                 ),
               ),
               const SizedBox(

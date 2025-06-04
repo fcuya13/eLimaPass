@@ -34,16 +34,20 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
       try {
         await _loginService.login(_dni, _password);
         // Si la autenticación es exitosa, navega a la pantalla de inicio
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (ctx) => const AppHome(),
-            ),
-            (Route<dynamic> route) => false);
+        if (mounted) {
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (ctx) => const AppHome(),
+              ),
+              (Route<dynamic> route) => false);
+        }
       } catch (e) {
         // Si la autenticación falla, muestra un mensaje de error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error de autenticación: $e')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error de autenticación: $e')),
+          );
+        }
       }
     }
     setState(() {

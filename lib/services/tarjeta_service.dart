@@ -49,7 +49,6 @@ class TarjetaService {
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
-    print(response.body);
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
@@ -94,7 +93,6 @@ class TarjetaService {
       'Content-Type': 'application/json',
     });
 
-    print(response.body);
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final recargasResponse = RecargasResponse.fromJson(json);
@@ -127,7 +125,6 @@ class TarjetaService {
     if (response.statusCode != 201) {
       throw Exception('Ha ocurrido un error desconocido. Inténtelo más tarde');
     }
-    print(response.body);
     return true;
   }
 

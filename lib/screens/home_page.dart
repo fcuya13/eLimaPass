@@ -48,10 +48,12 @@ class _HomePageState extends State<HomePage> {
         _viajes = listaViajes;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ha ocurrido un error')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Ha ocurrido un error')),
+        );
+      }
     } finally {
       setState(() {
         _loadingViajes = false;
@@ -85,10 +87,12 @@ class _HomePageState extends State<HomePage> {
         _isVisible = !_isVisible;
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).clearSnackBars();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Ha ocurrido un error')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Ha ocurrido un error')),
+        );
+      }
     } finally {
       setState(() {
         _loading = false;

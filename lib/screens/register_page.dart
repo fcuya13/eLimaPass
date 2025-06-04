@@ -47,9 +47,11 @@ class _RegisterScreenState extends State<RegisterScreen> with Validators {
         });
       } catch (e) {
         // Si la autenticación falla, muestra un mensaje de error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error de registro: $e')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error de registro: $e')),
+          );
+        }
       }
     }
     setState(() {

@@ -31,17 +31,20 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
       try {
         await tarjetaService.setRecarga(widget.montoARecargar, "yape");
         // pago
-
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const PaymentDialog();
-            });
+        if (mounted) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const PaymentDialog();
+              });
+        }
       } catch (e) {
         // Si la autenticación falla, muestra un mensaje de error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error de autenticación: $e')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error de autenticación: $e')),
+          );
+        }
       }
     }
     setState(() {

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:elimapass/models/entities/Paradero.dart';
 import 'package:elimapass/models/entities/Ruta.dart';
 import 'package:elimapass/services/map_service.dart';
@@ -11,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 
+import '../../util/constants.dart';
 import '../../widgets/loading_foreground.dart';
 
 class MapPage extends StatefulWidget {
@@ -24,7 +23,6 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapTestState extends State<MapPage> {
-  final Completer<GoogleMapController> _controller = Completer();
   GoogleMapController? mapController;
   LatLng? _currentPosition;
   LocationPermission? permission;
@@ -44,7 +42,7 @@ class _MapTestState extends State<MapPage> {
     polylineCoordinates = [];
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleApiKey: 'AIzaSyDM5-MwvTY2zaGg8wwMBmPZlST5dMHXAN0',
+      googleApiKey: GOOGLE_API_KEY,
       request: PolylineRequest(
           origin: PointLatLng(puntos.first.latitude, puntos.first.longitude),
           destination: PointLatLng(puntos.last.latitude, puntos.last.longitude),
@@ -52,11 +50,11 @@ class _MapTestState extends State<MapPage> {
     );
 
     if (result.points.isNotEmpty) {
-      result.points.forEach(
-        (PointLatLng point) => polylineCoordinates.add(
+      for (var point in result.points) {
+        polylineCoordinates.add(
           LatLng(point.latitude, point.longitude),
-        ),
-      );
+        );
+      }
       setState(() {});
     }
   }
@@ -77,9 +75,9 @@ class _MapTestState extends State<MapPage> {
   }
 
   getParaderos() async {
-    List<Paradero> _paraderos = await _mapService.getParaderos(widget.ruta.id);
+    List<Paradero> paraderos = await _mapService.getParaderos(widget.ruta.id);
     setState(() {
-      _allParaderos = _paraderos;
+      _allParaderos = paraderos;
     });
     setParaderosOnScreen(_allParaderos);
   }

@@ -88,7 +88,7 @@ class RutaItem extends StatelessWidget {
                   ),
                 ),
                 // Icono de mapa a la derecha
-                Icon(
+                const Icon(
                   Icons.map,
                   color: Colors.blue,
                 ),

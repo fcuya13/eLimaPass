@@ -103,7 +103,6 @@ class _AppHomeState extends State<AppHome> {
             IconButton(
                 onPressed: () async {
                   await _tarjetaService.provider.removeTarjeta();
-
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(

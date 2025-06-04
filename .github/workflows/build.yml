@@ -40,7 +40,7 @@ jobs:
     needs: build  # Este job depende del job 'build'
     steps:
       - name: Download APK artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: release-apk
 

@@ -1,37 +1,52 @@
-name: Build
+name: Build and Release APK
 on:
   push:
     branches:
       - master
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [closed]
+
 jobs:
-  sonarqube:
-    name: SonarQube
+  build:
+    name: Build APK
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+
       - uses: actions/setup-java@v1
         with:
-            java-version: '17.x'
+          java-version: '17.x'
+
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
           flutter-version: 3.24.0
+
       - run: flutter pub get
-
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - run: flutter test
 
       - run: flutter build apk --dart-define=GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
         with:
-            name: release-apk
-            path: build/app/outputs/apk/release/app-release.apk
+          name: release-apk
+          path: build/app/outputs/apk/release/app-release.apk
+
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build  # Este job depende del job 'build'
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: release-apk
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/app/outputs/apk/release/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

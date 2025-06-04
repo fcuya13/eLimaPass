@@ -26,18 +26,21 @@ class _AlertPageState extends State<AlertPage> {
       try {
         await _tarjetaService.setLimite(saldoMinimo);
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text("Ha ocurrido un error. Inténtelo más tarde")),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text("Ha ocurrido un error. Inténtelo más tarde")),
+          );
+        }
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Cantidad guardada: S/. $saldoMinimo")),
-      );
-      showNotification("Alerta configurada",
-          "Se ha configurado una alerta de saldo bajo de S/. $saldoMinimo");
-      Navigator.of(context).pop();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Cantidad guardada: S/. $saldoMinimo")),
+        );
+        showNotification("Alerta configurada",
+            "Se ha configurado una alerta de saldo bajo de S/. $saldoMinimo");
+        Navigator.of(context).pop();
+      }
     }
   }
 

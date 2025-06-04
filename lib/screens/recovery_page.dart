@@ -1,10 +1,11 @@
 import 'dart:convert';
+
+import 'package:elimapass/screens/login.dart'; // Importa la pantalla de login
+import 'package:elimapass/screens/register_page.dart';
+import 'package:elimapass/util/constants.dart';
+import 'package:elimapass/util/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:elimapass/screens/register_page.dart';
-import 'package:elimapass/screens/login.dart'; // Importa la pantalla de login
-import 'package:elimapass/util/validators.dart';
-import 'package:elimapass/util/constants.dart';
 
 import '../widgets/car_background.dart';
 
@@ -52,20 +53,22 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators {
           _isLoading = false; // Ocultar el indicador de carga
         });
 
-        if (response.statusCode == 200) {
+        if (response.statusCode == 200 && mounted) {
           showDialog(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text('Recuperación Exitosa'),
-                content: const Text('Se ha enviado un enlace de recuperación a su correo.'),
+                content: const Text(
+                    'Se ha enviado un enlace de recuperación a su correo.'),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop(); // Cerrar el diálogo
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => const LoginScreen(), // Redirigir a la pantalla de login
+                          builder: (context) =>
+                              const LoginScreen(), // Redirigir a la pantalla de login
                         ),
                       );
                     },
@@ -77,13 +80,19 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators {
           );
         } else {
           // Manejar el error
-          showErrorDialog(context, 'Error al recuperar la contraseña. Verifique sus datos.');
+          if (mounted) {
+            showErrorDialog(context,
+                'Error al recuperar la contraseña. Verifique sus datos.');
+          }
         }
       } catch (error) {
         setState(() {
           _isLoading = false; // Ocultar el indicador de carga en caso de error
         });
-        showErrorDialog(context, 'Hubo un error en la conexión. Inténtelo nuevamente.');
+        if (mounted) {
+          showErrorDialog(
+              context, 'Hubo un error en la conexión. Inténtelo nuevamente.');
+        }
       }
     }
   }
@@ -139,21 +148,21 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators {
                       _isLoading
                           ? const CircularProgressIndicator() // Mostrar indicador de carga si _isLoading es true
                           : ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff111318),
-                          foregroundColor: const Color(0XFFFFFFFF),
-                          fixedSize: const Size(300, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                        onPressed: _submit,
-                        child: const Text(
-                          "Recuperar Contraseña",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w700),
-                        ),
-                      ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff111318),
+                                foregroundColor: const Color(0XFFFFFFFF),
+                                fixedSize: const Size(300, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              onPressed: _submit,
+                              child: const Text(
+                                "Recuperar Contraseña",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w700),
+                              ),
+                            ),
                       const SizedBox(
                         height: 16,
                       ),
@@ -161,7 +170,8 @@ class _RecoveryScreenState extends State<RecoveryScreen> with Validators {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text("¿No tienes una cuenta?",
-                              style: TextStyle(color: Colors.white, fontSize: 13)),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 13)),
                           const SizedBox(
                             width: 6,
                           ),

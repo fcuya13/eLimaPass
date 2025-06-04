@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:u_credit_card/u_credit_card.dart';
-import '/services/tarjeta_service.dart';
 
+import '/services/tarjeta_service.dart';
 import '../../widgets/PaymentDialog.dart';
 
 class CreditDebitPage extends StatefulWidget {
@@ -31,19 +31,22 @@ class _CreditDebitPageState extends State<CreditDebitPage> {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       try {
-        bool? response = await tarjetaService.setRecarga(widget.montoARecargar, "tarjeta");
+        await tarjetaService.setRecarga(widget.montoARecargar, "tarjeta");
         // pago
-
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const PaymentDialog();
-            });
+        if (mounted) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const PaymentDialog();
+              });
+        }
       } catch (e) {
         // Si la autenticación falla, muestra un mensaje de error
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error de autenticación: $e')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error de autenticación: $e')),
+          );
+        }
       }
     }
     setState(() {

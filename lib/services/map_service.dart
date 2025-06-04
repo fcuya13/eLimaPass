@@ -16,7 +16,6 @@ class MapService {
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
-    print(response.body);
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
       final rutasResponse = RutaResponse.fromJson(json);
@@ -32,7 +31,6 @@ class MapService {
       'Content-Type': 'application/json',
     });
 
-    print(response.body);
     if (response.statusCode == 200) {
       final json = jsonDecode(utf8.decode(response.bodyBytes));
       final paraderos = ParaderoResponse.fromJson(json);

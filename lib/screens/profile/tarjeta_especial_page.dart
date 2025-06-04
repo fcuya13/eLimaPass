@@ -49,20 +49,26 @@ class _TarjetaEspecialPageState extends State<TarjetaEspecialPage> {
         await tarjetaService.uploadSolicitud(
             dni: dni, carne: carnet, codigoTarjeta: tarjeta.id);
 
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const DocumentsDialog();
-            });
+        if (mounted) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return const DocumentsDialog();
+              });
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("$e")),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("$e")),
+          );
+        }
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Sube las 4 fotos requeridas")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Sube las 4 fotos requeridas")),
+        );
+      }
     }
     setState(() {
       loading = false;

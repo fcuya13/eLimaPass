@@ -9,7 +9,7 @@ import 'app_home.dart';
 class LoadingScreen extends StatelessWidget {
   LoadingScreen({super.key});
 
-  TarjetaProvider provider = TarjetaProvider();
+  final TarjetaProvider provider = TarjetaProvider();
 
   Future<void> checkLogin(BuildContext context) async {
     Tarjeta? loggedUser = await provider.getTarjeta();

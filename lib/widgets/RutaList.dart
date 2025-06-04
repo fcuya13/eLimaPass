@@ -31,7 +31,7 @@ class _RutaListState extends State<RutaList> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             // Título del servicio con botón de expandir/colapsar (todo el contenedor es clickable)

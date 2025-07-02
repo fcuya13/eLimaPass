@@ -34,10 +34,10 @@ jobs:
       - name: Verify services are running
         run: |
           echo "Service status:"
-          docker-compose -f docker-compose.test.yml ps
+          docker compose -f docker-compose.test.yml ps
           
           echo "Testing PostgreSQL connection:"
-          docker-compose -f docker-compose.test.yml exec -T postgres pg_isready -U postgres
+          docker compose -f docker-compose.test.yml exec -T postgres pg_isready -U postgres
           
           echo "Testing backend health:"
           curl -f http://localhost:8080/actuator/health

@@ -1,4 +1,4 @@
-name: Continuous Delivery
+name: Continuous Deployment
 on:
   push:
     branches:
@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/ci.yml
     secrets: inherit
 
-  build:
+  build-with-prod-api:
     name: Build APK
     runs-on: ubuntu-latest
     needs: cont-integration

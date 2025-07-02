@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:13
@@ -29,7 +27,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:8080/actuator/health"]
+      test: [ "CMD", "curl", "--fail", "http://localhost:8080/elimapass/v1/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 12
+      retries: 15

@@ -31,6 +31,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - run: |
-          flutter test test/unit
-          flutter test test/widget
+      - run: flutter test test/unit

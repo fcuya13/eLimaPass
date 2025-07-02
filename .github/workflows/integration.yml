@@ -1,4 +1,4 @@
-name: Functional Tests
+name: Integration Tests
 
 on:
   push:
@@ -48,15 +48,10 @@ jobs:
           docker compose -f docker-compose.test.yml logs backend
           curl -f http://localhost:8080/elimapass/v1/actuator/health || echo "Backend health check failed"
 
-      - name: Run Dart functional tests
+      - name: Run Dart integration tests
         run: |
-          flutter test test/functional_test \
-            --dart-define=API_BASE_URL=http://localhost:8080/ \
-            --timeout=300s \
-            --concurrency=1 \
-            --verbose \
-            --reporter=expanded
-          
+          flutter test test/integration \
+            --dart-define=API_BASE_URL=http://localhost:8080/ 
 
       - name: Cleanup
         if: always()

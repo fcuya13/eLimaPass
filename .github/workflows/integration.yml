@@ -1,19 +1,13 @@
 name: Integration Tests
 
 on:
-  push:
-    branches:
-      - release
   repository_dispatch:
     types: [backend-updated]
   workflow_call:
 
-  workflow_dispatch:
-
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 

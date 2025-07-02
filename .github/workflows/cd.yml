@@ -1,13 +1,18 @@
-name: Build and Release APK
+name: Continuous Delivery
 on:
   push:
     branches:
       - master
 
 jobs:
+  cont-integration:
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
   build:
     name: Build APK
     runs-on: ubuntu-latest
+    needs: cont-integration
     steps:
       - uses: actions/checkout@v4
         with:

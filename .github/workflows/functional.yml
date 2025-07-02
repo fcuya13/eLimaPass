@@ -49,7 +49,14 @@ jobs:
           curl -f http://localhost:8080/elimapass/v1/actuator/health || echo "Backend health check failed"
 
       - name: Run Dart functional tests
-        run: flutter test test/functional_test  --dart-define=BACKEND_URL=http://localhost:8080/
+        run: |
+          flutter test test/functional_test \
+            --dart-define=API_BASE_URL=http://localhost:8080/ \
+            --timeout=300s \
+            --concurrency=1 \
+            --verbose \
+            --reporter=expanded
+          
 
       - name: Cleanup
         if: always()

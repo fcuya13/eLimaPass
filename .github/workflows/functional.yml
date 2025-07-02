@@ -8,30 +8,18 @@ on:
     types: [backend-updated]
   workflow_call:
 
+  workflow_dispatch:
+
+
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     services:
-      backend:
-        image: ghcr.io/fcuya13/elimapass-spring:latest
-        ports:
-          - 8080:8080
-        options: >-
-          --health-cmd="curl --fail http://localhost:8080/actuator/health || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/elimapass
-          SPRING_DATASOURCE_USERNAME: testuser
-          SPRING_DATASOURCE_PASSWORD: testpass
-          SPRING_PROFILES_ACTIVE: ci
-
       postgres:
         image: postgres:13
-        ports: [5432:5432]
+        ports: [ 5432:5432 ]
         env:
           POSTGRES_USER: testuser
           POSTGRES_PASSWORD: testpass
@@ -54,5 +42,31 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          timeout 60s bash -c 'until pg_isready -h localhost -p 5432 -U testuser; do sleep 2; done'
+
+      - name: Start backend service
+        run: |
+          docker run -d \
+            --name backend \
+            --network host \
+            -p 8080:8080 \
+            -e SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/elimapass \
+            -e SPRING_DATASOURCE_USERNAME=testuser \
+            -e SPRING_DATASOURCE_PASSWORD=testpass \
+            -e SPRING_PROFILES_ACTIVE=prod \
+            ghcr.io/fcuya13/elimapass-spring:latest
+
+      - name: Wait for backend to be ready
+        run: |
+          echo "Waiting for backend to be ready..."
+          timeout 120s bash -c 'until curl --fail http://localhost:8080/actuator/health; do sleep 5; done'
+
       - name: Run Dart functional tests
         run: flutter test test/functional_test
+
+      - name: Cleanup
+        if: always()
+        run: docker stop backend || true

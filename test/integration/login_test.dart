@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:elimapass/models/responses/LoginResponse.dart';
 import 'package:elimapass/util/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
@@ -24,9 +25,20 @@ void main() {
 
       expect(response.statusCode, equals(200));
       final data = jsonDecode(response.body);
-      expect(data, contains('id'));
-      expect(data, contains('tarjeta'));
-      expect(data, contains('tipo'));
+
+      expect(() => LoginResponse.fromJson(data), returnsNormally);
+
+      final loginResponse = LoginResponse.fromJson(data);
+      expect(loginResponse.id, isNotNull);
+      expect(loginResponse.id, isNotEmpty);
+      expect(loginResponse.tarjeta, isNotNull);
+      expect(loginResponse.tarjeta, isNotEmpty);
+      expect(loginResponse.tipo, isA<int>());
+      expect(loginResponse.tipo, anyOf(equals(0), equals(1)));
+      expect(loginResponse.tarjeta.length, equals(10));
+      expect(loginResponse.id, isA<String>());
+      expect(loginResponse.tarjeta, isA<String>());
+      expect(loginResponse.tipo, isA<int>());
     });
 
     test('returns 401 for wrong credentials', () async {

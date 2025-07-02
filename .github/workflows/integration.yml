@@ -1,0 +1,52 @@
+name: Integration Tests
+
+on:
+  repository_dispatch:
+    types: [backend-updated]
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start services
+        run: |
+          echo "Starting PostgreSQL..."
+          docker compose -f docker-compose.test.yml up -d postgres
+          
+          sleep 15         
+          
+          echo "Waiting for PostgreSQL to be healthy..."
+          docker compose -f docker-compose.test.yml up -d backend
+          
+          sleep 15
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.24.0
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify services are running
+        run: |
+          echo "Service status:"
+          docker compose -f docker-compose.test.yml ps
+          
+          echo "Testing PostgreSQL connection:"
+          docker compose -f docker-compose.test.yml exec -T postgres pg_isready -U postgres
+          docker compose -f docker-compose.test.yml logs backend
+          curl -f http://localhost:8080/elimapass/v1/actuator/health || echo "Backend health check failed"
+
+      - name: Run Dart integration tests
+        run: |
+          flutter test test/integration \
+            --dart-define=API_BASE_URL=http://localhost:8080/ 
+
+      - name: Cleanup
+        if: always()
+        run: docker stop backend || true

@@ -51,7 +51,7 @@ jobs:
       - name: Run Dart functional tests
         run: |
           flutter test test/functional_test \
-            --dart-define=BACKEND_URL=http://localhost:8080/ \
+            --dart-define=API_BASE_URL=http://localhost:8080/ \
             --timeout=300s \
             --concurrency=1 \
             --verbose \

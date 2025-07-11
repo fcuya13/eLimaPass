@@ -16,11 +16,10 @@ class BilleteraDigitalPage extends StatefulWidget {
 }
 
 class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
-  TarjetaService tarjetaService = TarjetaService();
+  final TarjetaService tarjetaService = TarjetaService();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _codigoAprobacion = TextEditingController();
   var loading = false;
-  var _hasError = false;
 
   void _submit() async {
     setState(() {
@@ -55,6 +54,7 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
   @override
   void dispose() {
     super.dispose();
+    _codigoAprobacion.dispose();
   }
 
   @override
@@ -122,7 +122,7 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
                     child: Text(
                       'Código de aprobación',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                   ),
                   PinCodeTextField(
@@ -137,22 +137,11 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
                     appContext: context,
                     length: 6,
                     controller: _codigoAprobacion,
-                    errorTextSpace: _hasError ? 20 : 0,
+                    errorTextSpace: 16.0, // Use default or a fixed space
                     validator: (value) {
                       if (value == null || value.length != 6) {
-                        Future.delayed(Duration.zero, () async {
-                          setState(() {
-                            _hasError = true;
-                          });
-                        });
-
                         return "Ingrese un código válido";
                       }
-                      Future.delayed(Duration.zero, () async {
-                        setState(() {
-                          _hasError = false;
-                        });
-                      });
                       return null;
                     },
                   )
@@ -166,7 +155,7 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                fixedSize: const Size(300, 60),
+                // fixedSize: const Size(300, 60),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18,
                   vertical: 14,
@@ -177,6 +166,7 @@ class _BilleteraDigitalPageState extends State<BilleteraDigitalPage> {
               ),
               onPressed: _submit,
               child: Row(
+                mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(

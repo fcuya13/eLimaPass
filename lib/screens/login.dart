@@ -9,19 +9,18 @@ import '../widgets/car_background.dart';
 import 'app_home.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final LoginService? loginService;
+  const LoginScreen({super.key, this.loginService});
 
   @override
-  State<StatefulWidget> createState() {
-    return _LoginScreenState();
-  }
+  State<StatefulWidget> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> with Validators {
   var _dni = "";
   var _password = "";
   final _formKey = GlobalKey<FormState>();
-  final _loginService = LoginService();
+  LoginService get _loginService => widget.loginService ?? LoginService();
   bool loading = false;
 
   void _submit() async {
@@ -160,10 +159,13 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
       ),
     );
   }
+  final dniFieldKey = const Key('dniField');
+  final passwordFieldKey = const Key('passwordField');
 
   Widget _textFields() {
     return Column(children: [
       TextFormField(
+        key: dniFieldKey,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
           errorStyle: const TextStyle(color: Color(0xffffb4ab)),
@@ -194,6 +196,7 @@ class _LoginScreenState extends State<LoginScreen> with Validators {
         height: 20,
       ),
       TextFormField(
+        key: passwordFieldKey,
         obscureText: true,
         decoration: InputDecoration(
           errorStyle: const TextStyle(color: Color(0xffffb4ab)),

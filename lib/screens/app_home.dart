@@ -107,8 +107,8 @@ class _AppHomeState extends State<AppHome> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => const LoginScreen()),
-                    (Route<dynamic> route) =>
-                        false, // Elimina todas las rutas anteriores
+                        (Route<dynamic> route) =>
+                    false, // Elimina todas las rutas anteriores
                   );
                 },
                 icon: const Icon(Icons.logout),

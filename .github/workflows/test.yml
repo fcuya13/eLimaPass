@@ -21,3 +21,5 @@ jobs:
       - run: flutter pub get
 
       - run: flutter test test/unit
+
+      - run: flutter test test/widget
